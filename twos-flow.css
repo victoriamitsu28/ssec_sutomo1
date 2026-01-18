@@ -1,0 +1,56 @@
+body {
+  margin: 0;
+  background: #0a0a1a;
+  color: white;
+  font-family: 'Inter', sans-serif;
+  overflow: hidden;
+}
+
+.flow-page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.flow-header {
+  padding: 60px 40px 20px;
+  z-index: 10;
+}
+
+.flow-header h1 {
+  font-size: clamp(36px, 6vw, 64px);
+  font-weight: 800;
+}
+
+.flow-header p {
+  opacity: 0.7;
+  max-width: 500px;
+}
+
+.flow-gallery {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  padding: 20px 40px 40px;
+}
+
+.flow-column {
+  position: relative;
+  overflow: hidden;
+}
+
+.flow-column-track {
+  position: absolute;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.flow-column img {
+  width: 100%;
+  border-radius: 18px;
+  object-fit: cover;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}

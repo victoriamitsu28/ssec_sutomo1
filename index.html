@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+
+  <!-- Make layout responsive on all devices -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Main stylesheet -->
+  <link rel="stylesheet" href="style.css" />
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+    import { getFirestore } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDE6XToUXNq9tVSVEn1rrTan9IuSLxN154",
+      authDomain: "ssecfaq2025-2026.firebaseapp.com",
+      projectId: "ssecfaq2025-2026",
+      storageBucket: "ssecfaq2025-2026.firebasestorage.app",
+      messagingSenderId: "773194493300",
+      appId: "1:773194493300:web:dbcdadfd26e43658855021"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // 🔥 THIS IS THE IMPORTANT LINE
+    window.FIREBASE_DB = db;
+
+    console.log("🔥 Firebase Firestore ready");
+  </script>
+
+  <script async src="https://www.instagram.com/embed.js"></script>
+  <title>SSEC 2025/2026</title>
+</head>
+
+<body>
+
+  <!-- LOADER OVERLAY -->
+  <div id="loader" class="loader" aria-label="Loading" role="status">
+    <div class="loader-bg">
+      <div class="noise"></div>
+      <div class="glow-orb orb-1"></div>
+      <div class="glow-orb orb-2"></div>
+      <div class="glow-orb orb-3"></div>
+      <div class="scanline"></div>
+    </div>
+
+    <div class="loader-content">
+      <div class="loader-mark">
+        <!-- Ring + sparks -->
+        <svg class="mark-svg" viewBox="0 0 220 220" fill="none" xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true">
+          <defs>
+            <linearGradient id="ringGrad" x1="12" y1="28" x2="210" y2="210" gradientUnits="userSpaceOnUse">
+              <stop offset="0" stop-color="rgba(255, 227, 200, 0.95)" />
+              <stop offset="0.45" stop-color="rgba(245, 205, 170, 0.9)" />
+              <stop offset="1" stop-color="rgba(255, 255, 255, 0.9)" />
+            </linearGradient>
+            <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="2.8" result="blur" />
+              <feColorMatrix in="blur" type="matrix" values="
+                  1 0 0 0 0
+                  0 1 0 0 0
+                  0 0 1 0 0
+                  0 0 0 0.9 0" result="glow" />
+              <feMerge>
+                <feMergeNode in="glow" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+
+          <!-- Outer ring (draw animation) -->
+          <path class="ring"
+            d="M110 22C158.6 22 198 61.4 198 110C198 158.6 158.6 198 110 198C61.4 198 22 158.6 22 110C22 61.4 61.4 22 110 22Z"
+            stroke="url(#ringGrad)" stroke-width="10" stroke-linecap="round" filter="url(#softGlow)" />
+
+          <!-- Inner ring (subtle offset) -->
+          <path class="ring ring-2"
+            d="M110 40C148.66 40 180 71.34 180 110C180 148.66 148.66 180 110 180C71.34 180 40 148.66 40 110C40 71.34 71.34 40 110 40Z"
+            stroke="rgba(255, 232, 210, 0.45)" stroke-width="3" stroke-linecap="round" />
+
+          <!-- Sparks (hand-drawn strokes) -->
+          <path class="spark s1" d="M68 82 C82 70, 92 64, 110 56" stroke="rgba(255, 235, 220, 0.9)"
+            stroke-width="7" stroke-linecap="round" />
+          <path class="spark s2" d="M148 76 C158 70, 168 66, 178 60" stroke="rgba(255, 235, 220, 0.9)"
+            stroke-width="7" stroke-linecap="round" />
+          <path class="spark s3" d="M90 158 C98 170, 108 178, 126 186" stroke="rgba(255, 235, 220, 0.9)"
+            stroke-width="7" stroke-linecap="round" />
+          <path class="spark s4" d="M46 132 C54 126, 62 120, 74 112" stroke="rgba(255, 235, 220, 0.85)"
+            stroke-width="6" stroke-linecap="round" />
+          <path class="spark s5" d="M152 150 C160 142, 170 134, 186 122" stroke="rgba(255, 235, 220, 0.85)"
+            stroke-width="6" stroke-linecap="round" />
+
+          <!-- Center dot -->
+          <circle class="center-dot" cx="110" cy="110" r="6" fill="rgba(255, 235, 220, 0.9)" />
+        </svg>
+      </div>
+
+      <div class="loader-type">
+        <div class="brand-row">
+          <span class="brand">SSEC</span>
+          <span class="tag">Sutomo 1 Science Exploration Club</span>
+        </div>
+
+        <div class="status-row">
+          <span class="status-text" id="statusText">Booting systems</span>
+          <span class="percent" id="percent">0%</span>
+        </div>
+
+        <div class="bar">
+          <div class="bar-fill" id="barFill"></div>
+        </div>
+
+        <div class="micro">
+          <span class="micro-left" id="microLeft">Initializing modules…</span>
+          <span class="micro-right" id="microRight">0 / 0 assets</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================
+       NAVBAR
+       - Fixed on top
+       - Never affected by scroll animations
+       ===================================================== -->
+  <nav class="navbar">
+    <div class="nav-blur"></div>
+
+    <div class="nav-content">
+      <div class="nav-left">
+        <a href="#Home" class="nav-link"><span class="nav-link-text">HOME</span><span class="nav-link-hover"></span></a>
+        <a href="#About" class="nav-link"><span class="nav-link-text">ABOUT</span><span
+            class="nav-link-hover"></span></a>
+      </div>
+
+      <div class="nav-logo">
+        <div class="logo-glow"></div>
+        <img src="assets/home/Biru.png" alt="Logo">
+      </div>
+
+      <div class="nav-right">
+        <a href="#Activities" class="nav-link"><span class="nav-link-text">ACTIVITIES</span><span
+            class="nav-link-hover"></span></a>
+        <a href="#Contact" class="nav-link"><span class="nav-link-text">CONTACT</span><span
+            class="nav-link-hover"></span></a>
+      </div>
+
+      <button class="menu-icon" id="menuToggle" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="#Home">HOME</a>
+      <a href="#About">ABOUT</a>
+      <a href="#Activities">ACTIVITIES</a>
+      <a href="#Contact">CONTACT</a>
+    </div>
+  </nav>
+
+
+  <!-- =====================================================
+       HERO SECTION
+       - Sticky
+       - Shrinks and fades on scroll
+       - NEVER goes under navbar
+       ===================================================== -->
+  <section id="Home" class="hero">
+
+    <!-- Title text above logo -->
+    <div class="hero-title-text">
+      <p class="hero-title-text-left">Hello!</p>
+      <p class="hero-title-text-right">We are</p>
+    </div>
+
+    <!-- Main hero content -->
+    <div class="hero-content">
+
+      <!-- Decorative clouds -->
+      <img src="assets/home/cloud.png" class="cloud cloud1" alt="">
+      <img src="assets/home/cloud.png" class="cloud cloud2" alt="">
+      <img src="assets/home/cloud.png" class="cloud cloud3" alt="">
+
+      <!-- Main logo -->
+      <img src="assets/home/ssec.png" class="hero-logo" alt="SSEC">
+
+      <!-- Subtitle -->
+      <p class="hero-subtitle">
+        Selamat datang di SSEC Sutomo 1.
+        Kami adalah sekumpulan siswa yang memiliki minat pada sains dan percaya bahwa kolaborasi serta eksplorasi adalah
+        kunci untuk berkembang.
+        Bersama, kami membangun komunitas yang aktif, suportif, dan berorientasi pada pembelajaran yang bermakna.
+      </p>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       ABOUT SECTION
+       - Provides scroll runway
+       - Card physically slides up
+       - Fully replaces hero
+       ===================================================== -->
+  <section id="About" class="about-wrapper">
+
+    <!-- The card itself (sticky, animated) -->
+    <div class="about-card">
+
+      <div class="about-container">
+
+        <!-- ================= LEFT TEXT ================= -->
+        <div class="about-text">
+
+          <div class="about-item">
+            <h2>SSEC (Sutomo 1 Science Exploration Club) </h2>
+            <p>
+              merupakan klub eksplorasi sains yang berada di bawah SMA Sutomo 1 Medan, Sumatera Utara, Indonesia. SSEC
+              juga menjadi salah satu kegiatan ekstrakurikuler yang mewadahi siswa-siswi SMA Sutomo 1 yang memiliki
+              ketertarikan terhadap sains dan proses ilmiah.
+            </p>
+            <p>
+              SSEC dibentuk sebagai ruang eksplorasi bagi siswa untuk memahami sains tidak hanya sebagai mata pelajaran
+              di kelas, tetapi sebagai cara berpikir dan alat untuk memahami fenomena di sekitar. Dalam kegiatan klub,
+              anggota didorong untuk aktif bertanya, berdiskusi, serta mengembangkan rasa ingin tahu terhadap berbagai
+              topik sains.
+            </p>
+            <p>
+              Selama mengikuti kegiatan SSEC, anggota akan dibimbing oleh mentor-mentor yang berpengalaman dan
+              berkualitas. Proses pembimbingan ini membantu anggota dalam mengeksplorasi topik sains secara lebih
+              terarah dan sistematis. Hasil dari eksplorasi tersebut kemudian didokumentasikan dan dibagikan melalui
+              berbagai media, seperti artikel, video, serta pameran sains.
+            </p>
+          </div>
+
+        </div>
+
+
+        <!-- ================= RIGHT CAMERA ================= -->
+        <div class="about-camera">
+
+          <!-- Camera frame image -->
+          <img src="assets/about/camera.png" class="camera-frame" alt="Camera">
+
+          <!-- White screen area -->
+          <div class="camera-screen">
+            <div class="camera-track" id="cameraTrack">
+              <img src="assets/TWOS 2025/image3_orig.jpg" class="camera-slide">
+              <img src="assets/TWOS 2025/image1_orig.jpg" class="camera-slide">
+              <img src="assets/TWOS 2025/image2_orig.jpg" class="camera-slide">
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+  <!-- ================= SLIDER SECTION ================= -->
+  <section id="Activities" class="twos-section">
+    <div class="twos-panel">
+      <div class="twos-inner">
+
+        <!-- LEFT ARROW -->
+        <button class="arrow arrow-left" id="prevBtn">
+          &#8592;
+        </button>
+
+        <!-- RIGHT ARROW -->
+        <button class="arrow arrow-right" id="nextBtn">
+          &#8594;
+        </button>
+
+        <!-- ================= SLIDER VIEWPORT ================= -->
+        <!-- This masks the overflow so only ONE slide is visible -->
+        <div class="twos-viewport">
+
+          <!-- ================= SLIDER TRACK ================= -->
+          <!-- This moves left/right -->
+          <div class="twos-track" id="twosTrack">
+
+            <!-- ===== SLIDE 1 ===== -->
+            <div class="twos-slide">
+              <h1 class="twos-title">TWOS 2024 / 2025</h1>
+
+              <div class="card-group">
+
+                <div class="card-wrap card-left">
+                  <img src="assets/TWOS 2025/1.png" class="card">
+                </div>
+
+                <div class="card-wrap card-center">
+                  <img src="assets/TWOS 2025/2.png" class="card">
+                </div>
+
+                <div class="card-wrap card-right">
+                  <img src="assets/TWOS 2025/3.png" class="card">
+                </div>
+
+              </div>
+
+              <a href="twos-2024.html" class="read-more">Read more →</a>
+            </div>
+
+            <!-- ===== SLIDE 3 ===== -->
+            <div class="twos-slide">
+              <h1 class="twos-title">TWOS 2022 / 2023</h1>
+
+              <div class="card-group">
+
+                <div class="card-wrap card-left">
+                  <img src="assets/TWOS 2023/1.png" class="card">
+                </div>
+
+                <div class="card-wrap card-center">
+                  <img src="assets/TWOS 2023/2.png" class="card">
+                </div>
+
+                <div class="card-wrap card-right">
+                  <img src="assets/TWOS 2023/3.png" class="card">
+                </div>
+
+              </div>
+            </div>
+            <!-- ===== SLIDE 4 ===== -->
+            <div class="twos-slide">
+              <h1 class="twos-title">Sejarah TWOS</h1>
+
+              <div class="card-group">
+
+                <div class="card-wrap card-left">
+                  <img src="assets/sejarahtwos/1.png" class="card">
+                </div>
+
+                <div class="card-wrap card-center">
+                  <img src="assets/sejarahtwos/2.png" class="card">
+                </div>
+
+                <div class="card-wrap card-right">
+                  <img src="assets/sejarahtwos/3.png" class="card">
+                </div>
+
+              </div>
+              <a href="twos-history.html" class="read-more">Read more →</a>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </section>
+  <!-- ================= NEXT SECTION AFTER TWOS ================= -->
+  <section class="tacos-section">
+
+    <div class="tacos-container">
+
+      <!-- ===== IMAGE STACK (LEFT) ===== -->
+      <div class="tacos-stack">
+        <img src="assets/Tacos/2.png" class="stack-img pos-0">
+        <img src="assets/Tacos/3 (1).png" class="stack-img pos-1">
+        <img src="assets/Tacos/4.png" class="stack-img pos-2">
+        <img src="assets/Tacos/5.png" class="stack-img pos-3">
+        <img src="assets/Tacos/6.png" class="stack-img pos-4">
+        <img src="assets/Tacos/7.png" class="stack-img pos-5">
+        <img src="assets/Tacos/8.png" class="stack-img pos-5">
+        <img src="assets/Tacos/9.png" class="stack-img pos-5">
+        <img src="assets/Tacos/10.png" class="stack-img pos-5">
+        <img src="assets/Tacos/11.png" class="stack-img pos-5">
+        <!-- CONTROLS: moved INSIDE the stack so they center to the images -->
+        <div class="tacos-controls-under">
+          <button id="stackPrev" class="nav-btn prev">←</button>
+          <button id="stackNext" class="nav-btn next">→</button>
+        </div>
+      </div>
+      <!-- ===== TEXT (RIGHT) ===== -->
+      <div class="tacos-text">
+
+        <h2>The Annual Conference of Science (TACOS)</h2>
+
+        <p>
+          The Annual Conference In Science adalah suatu kegiatan internal yang
+          bertujuan untuk
+          <span class="highlight">merekapitulasi hasil eksplorasi selama setahun.</span>
+          Disajikan dalam bentuk konferensi di mana peserta bergantian memberikan talk,
+          kegiatan ini diharapkan dapat membuka pikiran para anggota SSEC.
+        </p>
+
+        <p>
+          <span class="highlight">Eksplorasi-eksplorasi terbaik sepanjang tahun</span>
+          dipilih untuk dipresentasikan pada TACoS. Dengan demikian, kualitas dari TACoS menunjukkan pencapaian
+          tertinggi yang diraih selama satu periode tersebut. Sifatnya yang khusus yaitu dengan hanya mengundang anggota
+          SSEC memberikan suatu kesan penghargaan bagi anggota SSEC atas kerja kerasnya selama satu periode dan juga
+          memberikan kesempatan untuk melihat hasil karya yang dibuat oleh bidang lain.
+        </p>
+
+
+
+      </div>
+
+    </div>
+  </section>
+  <section class="studio-section">
+    <div class="studio-slider">
+
+      <button class="studio-nav prev" onclick="studioPrev()">←</button>
+      <button class="studio-nav next" onclick="studioNext()">→</button>
+
+      <div class="studio-viewport">
+        <div class="studio-track" id="studioTrack">
+
+          <!-- ===== SLIDE 1 ===== -->
+          <div class="studio-slide">
+            <h3>SSEC Angkatan 13</h3>
+
+            <h3>Pengurus Inti · Tim Media</h3>
+            <div class="studio-row studio-row-3">
+              <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DP6vupWAW0T/"
+                data-instgrm-version="14"></blockquote>
+
+              <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DP6vTJlgao9/"
+                data-instgrm-version="14"></blockquote>
+
+              <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DP6u6KnARhc/"
+                data-instgrm-version="14"></blockquote>
+            </div>
+
+            <h3>Komite</h3>
+            <div class="studio-row">
+              <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DP6wm9OgfP6/"
+                data-instgrm-version="14"></blockquote>
+
+              <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DP6wLjRAV0e/"
+                data-instgrm-version="14"></blockquote>
+            </div>
+          </div>
+
+          <!-- ===== SLIDE 2 ===== -->
+          <div class="studio-slide">
+            <h3>SSEC Angkatan 12</h3>
+            <h3>Pengurus Inti · Tim Media</h3>
+            <div class="studio-row studio-row-3">
+              <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DAlYOQAzleA/"
+                data-instgrm-version="14"></blockquote>
+
+              <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DAlYDgQTdvZ/"
+                data-instgrm-version="14"></blockquote>
+
+              <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DAlXzm7zmcF/"
+                data-instgrm-version="14"></blockquote>
+            </div>
+
+            <h3>Komite</h3>
+            <div class="studio-row">
+              <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DAlZCQjTdO_/"
+                data-instgrm-version="14"></blockquote>
+
+              <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DAlY9enzrJG/"
+                data-instgrm-version="14"></blockquote>
+            </div>
+          </div>
+
+          <!-- ===== SLIDE 3 ===== -->
+          <div class="studio-slide">
+            <h3>Pra SSEC</h3>
+            <div class="pra-wrapper">
+              <div class="pra-card-grid">
+                <div class="pra-card">
+                  <img src="assets/prassec/pra1.png">
+                  <h4>ADRIAN NUGRAHA UTAMA</h4>
+                  <p>Ketua Umum</p>
+                  <span>XII · IPA 01</span>
+                </div>
+
+                <div class="pra-card">
+                  <img src="assets/prassec/pra2.png">
+                  <h4>LEONARD</h4>
+                  <p>Ketua 1</p>
+                  <span>XII · IPA 01</span>
+                </div>
+
+                <div class="pra-card">
+                  <img src="assets/prassec/pra3.png">
+                  <h4>EDWARD</h4>
+                  <p>Ketua 2</p>
+                  <span>XII · IPS 01</span>
+                </div>
+
+                <div class="pra-card">
+                  <img src="assets/prassec/pra4.png">
+                  <h4>WILSON BUNJAMIN</h4>
+                  <p>Ketua 3</p>
+                  <span>XII · IPA 05</span>
+                </div>
+
+                <div class="pra-card">
+                  <img src="assets/prassec/pra5.png">
+                  <h4>MEILIA</h4>
+                  <p>Sekretaris</p>
+                  <span>XII · IPA 01</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq-section" id="FAQ">
+
+    <h2 class="faq-title">FAQ</h2>
+
+    <!-- Tell us anything -->
+    <div class="faq-input-wrapper">
+      <label class="faq-input-label">Tell us anything</label>
+      <div class="faq-input-box">
+        <input type="text" id="faqInput" placeholder="Type anything you want to tell us..." />
+        <button id="faqSubmit">Send</button>
+      </div>
+      <p class="faq-hint">Your message will be saved for review.</p>
+    </div>
+
+    <!-- Frequently Asked Questions -->
+    <h3 class="faq-subtitle">Frequently asked questions</h3>
+
+    <div class="faq-list">
+
+      <div class="faq-item">
+        <button class="faq-question">
+          Kapan sih jadwal ekskul SSEC biasanya diadakan?
+          <span class="faq-icon">⌄</span>
+        </button>
+        <div class="faq-answer">
+          Kegiatan ekstrakurikuler SSEC dilaksanakan setiap hari Jumat, pukul 15.00–16.20 WIB.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          Apakah pendaftaran SSEC melalui proses seleksi?
+          <span class="faq-icon">⌄</span>
+        </button>
+        <div class="faq-answer">
+          Pendaftaran sebagai anggota tidak melalui proses seleksi, namun jumlah peserta terbatas.
+          Sementara itu, pendaftaran sebagai pengurus wajib mengikuti tahapan seleksi yang telah ditentukan。
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">
+          Apakah terdapat ujian, tes akademik, atau pekerjaan rumah (PR) di SSEC?
+          <span class="faq-icon">⌄</span>
+        </button>
+        <div class="faq-answer">
+          SSEC tidak menerapkan ujian, tes akademik, maupun pekerjaan rumah. Kegiatan lebih difokuskan pada praktik,
+          diskusi materi, serta permainan edukatif untuk menciptakan suasana belajar yang menyenangkan.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          Apakah siswa jurusan Ilmu Sosial (IS) diperbolehkan bergabung dengan SSEC?
+          <span class="faq-icon">⌄</span>
+        </button>
+        <div class="faq-answer">
+          Ya, siswa dari jurusan MIA maupun IS diperbolehkan bergabung dan dapat memilih bidang eksplorasi sesuai
+          minat,
+          termasuk di luar jurusan asalnya. </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          Gimana caranya kalau mau jadi pengurus SSEC?
+          <span class="faq-icon">⌄</span>
+        </button>
+        <div class="faq-answer">
+          Calon pengurus dapat mendaftar melalui Google Form yang dibagikan oleh panitia. Informasi mengenai seleksi
+          akan disampaikan pada saat Technical Meeting, kemudian dilanjutkan dengan tahapan wawancara dan tes
+          keterampilan.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          Apa keuntungan atau benefit kalau gabung SSEC?
+          <span class="faq-icon">⌄</span>
+        </button>
+        <div class="faq-answer">
+          Pengurus SSEC akan memperoleh sertifikat yang dapat menunjang portofolio serta pengalaman bekerja dalam tim.
+          Sementara itu, anggota SSEC akan mendapatkan nilai tambah pada rapor serta pengalaman belajar sains secara
+          eksploratif dan aplikatif. </div>
+      </div>
+    </div>
+  </section>
+  <section id="Contact">
+    <footer class="footer">
+      <div class="footer-inner">
+
+        <!-- LEFT: BIG MESSAGE -->
+        <div class="footer-left">
+          <h2>Let’s<br>Connect</h2>
+          <p class="footer-sub">
+            We’re online on socials.<br>
+            Reach out anytime.
+          </p>
+        </div>
+
+        <!-- RIGHT: CONTACT + CREDITS -->
+        <div class="footer-right">
+
+          <div class="footer-contact">
+            <a href="https://wa.me/628116520080" target="_blank" aria-label="WhatsApp">
+              <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/whatsapp.svg" alt="WhatsApp"
+                style=" height: 80px ">
+            </a>
+
+            <a href="https://www.instagram.com/ssec_sutomo1/" target="_blank" aria-label="Instagram">
+              <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/instagram.svg" alt="Instagram"
+                style=" height: 80px ">
+            </a>
+          </div>
+
+          <div class="footer-credits">
+            <p><strong>Developer</strong> Victoria Mitsu</p>
+            <p><strong>Contributor</strong> Cyra Naysa Y.</p>
+            <p><strong>Writer</strong> Eva Cangelia J.</p>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        © 2025 SSEC. All rights reserved.
+      </div>
+    </footer>
+  </section>
+  <!-- =====================================================
+       SCROLL ANIMATION SCRIPT
+       - Hero collapse
+       - About card rise
+       - MindMarket-style handoff
+       ===================================================== -->
+  <script>
+      (function () {
+      const loader = document.getElementById("loader");
+      const percentEl = document.getElementById("percent");
+      const barFill = document.getElementById("barFill");
+      const statusText = document.getElementById("statusText");
+      const microLeft = document.getElementById("microLeft");
+      const microRight = document.getElementById("microRight");
+
+      // Safety: if user has reduced motion, keep it snappy.
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      // Messages that rotate slightly as progress increases
+      const steps = [
+        { at: 0, text: "Booting systems", micro: "Initializing modules…" },
+        { at: 12, text: "Loading interface", micro: "Warming up UI layers…" },
+        { at: 28, text: "Syncing components", micro: "Fetching core assets…" },
+        { at: 45, text: "Calibrating visuals", micro: "Optimizing rendering…" },
+        { at: 62, text: "Preparing content", micro: "Mounting sections…" },
+        { at: 78, text: "Final checks", micro: "Verifying integrity…" },
+        { at: 92, text: "Almost there", micro: "Finalizing…" },
+      ];
+
+      function setUI(p, loaded, total) {
+        const clamped = Math.max(0, Math.min(100, p));
+        percentEl.textContent = `${Math.round(clamped)}%`;
+        barFill.style.transform = `scaleX(${clamped / 100})`;
+
+        // Step messages
+        let msg = steps[0];
+        for (const s of steps) if (clamped >= s.at) msg = s;
+        statusText.textContent = msg.text;
+        microLeft.textContent = msg.micro;
+
+        microRight.textContent = `${loaded} / ${total} assets`;
+      }
+
+      // Find "assets" to track (best-effort; not perfect but feels real)
+      const images = Array.from(document.images || []);
+      const styles = Array.from(document.querySelectorAll("link[rel='stylesheet']") || []);
+      const scripts = Array.from(document.querySelectorAll("script[src]") || []);
+
+      // Also include background images? (Skip; too expensive to compute reliably.)
+      const assets = [
+        ...images.map(img => ({ type: "img", el: img, url: img.currentSrc || img.src })),
+        ...styles.map(l => ({ type: "css", el: l, url: l.href })),
+        ...scripts.map(s => ({ type: "js", el: s, url: s.src })),
+      ].filter(a => a.url);
+
+      let total = assets.length;
+      if (total === 0) total = 12; // fallback "virtual" assets so it still animates nicely
+
+      let loaded = 0;
+
+      // Progress smoothing
+      let targetProgress = 0;
+      let displayedProgress = 0;
+
+      // Timing
+      const start = performance.now();
+      const minDuration = reduceMotion ? 350 : 950; // cinematic minimum time
+      const maxDuration = reduceMotion ? 900 : 3500; // hard cap
+
+      function bumpTarget() {
+        // Keep target progress tied to loaded ratio, but never go backwards.
+        const ratio = total ? (loaded / total) : 0;
+        const base = ratio * 92; // keep some headroom for finalizing
+        targetProgress = Math.max(targetProgress, base);
+
+        // Add tiny randomness so it feels organic
+        targetProgress = Math.min(94, targetProgress + (Math.random() * 1.1));
+      }
+
+      // Mark asset as loaded once
+      function markLoaded() {
+        loaded = Math.min(total, loaded + 1);
+        bumpTarget();
+      }
+
+      // Track real assets (images)
+      assets.forEach(a => {
+        if (a.type === "img") {
+          // If already complete
+          if (a.el.complete && a.el.naturalWidth > 0) {
+            markLoaded();
+          } else {
+            a.el.addEventListener("load", markLoaded, { once: true });
+            a.el.addEventListener("error", markLoaded, { once: true });
+          }
+        } else {
+          // CSS/JS: we can't reliably know load state from here if already loaded,
+          // so we treat them as "virtual" with a short delay.
+          setTimeout(markLoaded, 120 + Math.random() * 380);
+        }
+      });
+
+      // If there are no real assets, simulate
+      if (assets.length === 0) {
+        const virtual = total;
+        for (let i = 0; i < virtual; i++) {
+          setTimeout(markLoaded, 120 + i * (reduceMotion ? 28 : 55) + Math.random() * 90);
+        }
+      }
+
+      // Main animation loop
+      let raf;
+      function tick(now) {
+        const elapsed = now - start;
+
+        // Move displayedProgress toward targetProgress smoothly
+        const easing = reduceMotion ? 0.22 : 0.085;
+        displayedProgress += (targetProgress - displayedProgress) * easing;
+
+        // Time-based lift so it doesn't stall on slow pages
+        const timeLift = Math.min(86, (elapsed / maxDuration) * 86);
+        targetProgress = Math.max(targetProgress, timeLift);
+
+        // When window "load" fires, we finalize to 100
+        // We'll set a flag below.
+        setUI(displayedProgress, Math.min(loaded, total), total);
+
+        raf = requestAnimationFrame(tick);
+      }
+      raf = requestAnimationFrame(tick);
+
+      // Finalize + fade out
+      let didFinish = false;
+
+      function finish() {
+        if (didFinish) return;
+        didFinish = true;
+
+        // Snap target to 100 smoothly
+        const now = performance.now();
+        const elapsed = now - start;
+        const remaining = Math.max(0, minDuration - elapsed);
+
+        // Ensure minimum duration for polish
+        setTimeout(() => {
+          targetProgress = 100;
+
+          // Push displayed quickly to 100
+          const finalStart = performance.now();
+          const finalDur = reduceMotion ? 180 : 420;
+
+          function finalTick(t) {
+            const u = Math.min(1, (t - finalStart) / finalDur);
+            // easeOutCubic
+            const eased = 1 - Math.pow(1 - u, 3);
+            displayedProgress = displayedProgress + (100 - displayedProgress) * eased;
+            setUI(displayedProgress, total, total);
+
+            if (u < 1) {
+              requestAnimationFrame(finalTick);
+              return;
+            }
+
+            // Fade out overlay
+            loader.classList.add("loader-hide");
+            setTimeout(() => {
+              cancelAnimationFrame(raf);
+              loader.remove();
+            }, reduceMotion ? 120 : 650);
+          }
+          requestAnimationFrame(finalTick);
+        }, remaining);
+      }
+
+      // If page fully loaded
+      window.addEventListener("load", () => {
+        // Mark any remaining as loaded
+        loaded = total;
+        bumpTarget();
+        finish();
+      });
+
+      // Safety: hard timeout
+      setTimeout(finish, maxDuration);
+    })();
+    const toggle = document.getElementById('menuToggle');
+    const menu = document.getElementById('mobileMenu');
+
+    toggle.addEventListener('click', () => {
+      toggle.classList.toggle('active');
+      menu.classList.toggle('active');
+    });
+
+    // Close when clicking a link
+    document.querySelectorAll('.mobile-menu a').forEach(link => {
+      link.addEventListener('click', () => {
+        toggle.classList.remove('active');
+        menu.classList.remove('active');
+      });
+    });
+    const hero = document.querySelector('.hero');
+    const heroLogo = document.querySelector('.hero-logo');
+    const heroText = document.querySelector('.hero-title-text');
+    const heroContent = document.querySelector('.hero-content');
+
+    const aboutWrapper = document.querySelector('.about-wrapper');
+    const aboutCard = document.querySelector('.about-card');
+
+    const NAV_HEIGHT = 100;
+
+    window.addEventListener('scroll', () => {
+      const scrollY = window.scrollY;
+      const heroHeight = hero.offsetHeight;
+      const aboutStart = aboutWrapper.offsetTop - heroHeight;
+
+      /* ================= PHASE 0 — HARD RESET ================= */
+      if (scrollY <= 0) {
+        heroLogo.style.transform = 'scale(1)';
+        heroContent.style.opacity = '1';
+        heroText.style.opacity = '1';
+
+        aboutCard.style.transform = 'translateY(100%)';
+        return;
+      }
+
+      /* ================= PHASE 1 — HERO SHRINK ================= */
+      let heroProgress = scrollY / heroHeight;
+      heroProgress = Math.min(Math.max(heroProgress, 0), 1);
+
+      const scale = 1 - heroProgress * 0.45;
+      const opacity = 1 - heroProgress * 1.2;
+
+      heroLogo.style.transform = `scale(${scale})`;
+      heroContent.style.opacity = opacity;
+      heroText.style.opacity = opacity;
+
+      /* ================= PHASE 2 — ABOUT CARD RISE ================= */
+      if (scrollY > aboutStart) {
+        let cardProgress =
+          (scrollY - aboutStart) / heroHeight;
+
+        cardProgress = Math.min(Math.max(cardProgress, 0), 1);
+
+        const translateY = (1 - cardProgress) * 100;
+        aboutCard.style.transform = `translateY(${translateY}%)`;
+      } else {
+        /* Keep card hidden before trigger */
+        aboutCard.style.transform = 'translateY(100%)';
+      }
+    });
+    /* ===============================
+About SLIDER – STABLE VERSION
+=============================== */
+    /* About text reveal: staggered headline + paragraph reveal */
+    (function () {
+      const aboutItems = document.querySelectorAll('.about-item');
+
+      if (!aboutItems.length) return;
+
+      const options = { root: null, rootMargin: '0px', threshold: 0.18 };
+
+      const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+
+          const item = entry.target;
+          const h2 = item.querySelector('h2');
+          const paras = Array.from(item.querySelectorAll('p'));
+
+          // reveal heading quickly
+          if (h2) {
+            setTimeout(() => h2.classList.add('revealed'), 80);
+          }
+
+          // stagger paragraphs
+          paras.forEach((p, i) => {
+            setTimeout(() => p.classList.add('revealed'), 220 + i * 140);
+          });
+
+          obs.unobserve(item);
+        });
+      }, options);
+
+      aboutItems.forEach(it => observer.observe(it));
+    })();
+    (() => {
+      const track = document.getElementById("cameraTrack");
+      const slides = Array.from(track.children);
+      let index = 0;
+
+      slides[0].classList.add("active");
+
+      setInterval(() => {
+        // remove active from current
+        slides[index].classList.remove("active");
+
+        // next slide
+        index = (index + 1) % slides.length;
+
+        // move track
+        track.style.transform = `translateX(-${index * 100}%)`;
+
+        // activate new slide
+        slides[index].classList.add("active");
+      }, 5000);
+    })();
+    /* ===============================
+    TWOS SLIDER – STABLE VERSION
+    =============================== */
+
+    const track = document.getElementById('twosTrack');
+    const slides = document.querySelectorAll('.twos-slide');
+
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    let currentIndex = 0;
+
+
+    /* ===============================
+       CORE FUNCTION: UPDATE SLIDER
+       Uses real pixel width (no % bugs)
+       =============================== */
+    function updateSlider() {
+      const slideWidth = slides[0].offsetWidth;
+      const offset = slideWidth * currentIndex;
+
+      track.style.transform = `translateX(-${offset}px)`;
+    }
+
+    /* ===============================
+       NEXT BUTTON
+       =============================== */
+    nextBtn.addEventListener('click', () => {
+      currentIndex++;
+
+      if (currentIndex >= slides.length) {
+        currentIndex = slides.length - 1; // stop at last slide
+      }
+
+      updateSlider();
+    });
+
+    /* ===============================
+       PREVIOUS BUTTON
+       =============================== */
+    prevBtn.addEventListener('click', () => {
+      currentIndex--;
+
+      if (currentIndex < 0) {
+        currentIndex = 0; // stop at first slide
+      }
+
+      updateSlider();
+    });
+
+    /* ===============================
+       HANDLE WINDOW RESIZE
+       Prevents broken layout on resize
+       =============================== */
+    window.addEventListener('resize', () => {
+      updateSlider();
+    });
+
+    /* ===============================
+       INITIAL RENDER
+       =============================== */
+    window.addEventListener('load', () => {
+      currentIndex = 0;
+      updateSlider();
+    });
+    /* ===============================
+   Tacos
+   =============================== */
+    document.addEventListener('DOMContentLoaded', () => {
+
+      const images = Array.from(document.querySelectorAll('.stack-img'));
+      const nextBtn = document.getElementById('stackNext');
+      const prevBtn = document.getElementById('stackPrev');
+
+      const DURATION = 600;
+      let locked = false;
+
+      function applyPositions() {
+        images.forEach((img, i) => {
+          img.className = 'stack-img';
+          img.classList.add(`pos-${i}`);
+        });
+      }
+
+      nextBtn.addEventListener('click', () => {
+        if (locked) return;
+        locked = true;
+
+        const top = images[0];
+        top.classList.add('to-back');
+
+        setTimeout(() => {
+          top.classList.remove('to-back');
+          images.push(images.shift());
+          applyPositions();
+          locked = false;
+        }, DURATION);
+      });
+
+      prevBtn.addEventListener('click', () => {
+        if (locked) return;
+        locked = true;
+
+        const last = images.pop();
+        images.unshift(last);
+
+        last.classList.add('from-back');
+        applyPositions();
+
+        requestAnimationFrame(() => {
+          last.classList.remove('from-back');
+        });
+
+        setTimeout(() => {
+          locked = false;
+        }, DURATION);
+      });
+
+      applyPositions();
+    });
+    /* studio */
+    window.instgrm.Embeds.process();
+    const studioSlides = document.querySelectorAll('.studio-slide');
+
+    function showStudioSlide(slideNumber) {
+      studioSlides.forEach(s => s.classList.remove('active'));
+
+      const target = document.querySelector(
+        `.studio-slide[data-slide="${slideNumber}"]`
+      );
+
+      if (target) {
+        target.classList.add('active');
+
+        if (window.instgrm) {
+          window.instgrm.Embeds.process();
+        }
+      }
+    }
+
+    // SHOW REAL CONTENT BY DEFAULT
+    showStudioSlide(2);
+    let current = 2;
+
+    document.querySelector('.arrow-right').onclick = () => {
+      current = current === 3 ? 2 : current + 1;
+      showStudioSlide(current);
+    };
+
+    document.querySelector('.arrow-left').onclick = () => {
+      current = current === 2 ? 3 : current - 1;
+      showStudioSlide(current);
+    };
+    let studioIndex = 0;
+
+    function updateStudio() {
+      const track = document.getElementById("studioTrack");
+      track.style.transform = `translateX(-${studioIndex * 100}%)`;
+
+      if (window.instgrm) {
+        window.instgrm.Embeds.process();
+      }
+    }
+
+    function studioNext() {
+      const slides = document.querySelectorAll(".studio-slide");
+      studioIndex = Math.min(studioIndex + 1, slides.length - 1);
+      updateStudio();
+    }
+
+    function studioPrev() {
+      studioIndex = Math.max(studioIndex - 1, 0);
+      updateStudio();
+    }
+    /* FAQ accordion */
+    document.querySelectorAll('.faq-question').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = btn.closest('.faq-item');
+
+        // close others (optional, like SafetyWing)
+        document.querySelectorAll('.faq-item').forEach(i => {
+          if (i !== item) i.classList.remove('active');
+        });
+
+        item.classList.toggle('active');
+      });
+    });
+    /* Tell us anything input */
+    const input = document.getElementById('faqInput');
+    const submit = document.getElementById('faqSubmit');
+
+    async function saveMessage() {
+      const value = input.value.trim();
+      if (!value) return;
+
+      try {
+        const { collection, addDoc, serverTimestamp } =
+          await import("https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js");
+
+        await addDoc(
+          collection(window.FIREBASE_DB, "faqMessages"),
+          {
+            message: value,
+            createdAt: serverTimestamp(),
+            page: "FAQ",
+            userAgent: navigator.userAgent
+          }
+        );
+
+        input.value = '';
+        alert('Message sent successfully!');
+      } catch (err) {
+        console.error(err);
+        alert('Failed to send message');
+      }
+    }
+
+    input.value = '';
+    alert('Message saved!');
+
+    submit.addEventListener('click', saveMessage);
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter') saveMessage();
+    });
+  </script>
+
+
+
+</body>
+
+</html>
