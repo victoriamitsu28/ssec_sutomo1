@@ -13,19 +13,9 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
     import { getFirestore } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyDE6XToUXNq9tVSVEn1rrTan9IuSLxN154",
-      authDomain: "ssecfaq2025-2026.firebaseapp.com",
-      projectId: "ssecfaq2025-2026",
-      storageBucket: "ssecfaq2025-2026.firebasestorage.app",
-      messagingSenderId: "773194493300",
-      appId: "1:773194493300:web:dbcdadfd26e43658855021"
-    };
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-
-    // 🔥 THIS IS THE IMPORTANT LINE
     window.FIREBASE_DB = db;
 
     console.log("🔥 Firebase Firestore ready");
