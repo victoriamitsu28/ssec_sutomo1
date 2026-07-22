@@ -41,15 +41,16 @@ The site is built as a static front-end project and can be hosted on GitHub Page
 
 ```text
 .
-├── index.html              Main landing page
-├── style.css               Main website styles
-├── twos-2024.html          TWOS 2024/2025 gallery
-├── twos-history.html       TWOS history page
-├── twos-flow.css           TWOS gallery styles
-├── twos-flow.js            TWOS gallery interactions
-├── assets/                 Images and visual assets
-├── scripts/                Repository validation tools
-└── .github/workflows/      Automated quality checks
+├── index.html                  Main landing page
+├── style.css                   Main website styles
+├── twos-2024.html              TWOS 2024/2025 gallery
+├── twos-history.html           TWOS history page
+├── twos-flow.css               TWOS gallery styles
+├── twos-flow.js                TWOS gallery interactions
+├── firebase-config.example.js  Firebase configuration template
+├── assets/                     Images and visual assets
+├── scripts/                    Repository validation tools
+└── .github/workflows/          Automated quality checks
 ```
 
 ## Run locally
@@ -74,7 +75,12 @@ You can also use the **Live Server** extension and open `index.html` through it.
 
 ## Firebase setup
 
-The FAQ message form uses Firebase Firestore. Before enabling submissions, define a Firebase web configuration and make sure Firestore security rules only allow the operations the site genuinely needs.
+The FAQ message form uses Firebase Firestore.
+
+1. Copy `firebase-config.example.js` to `firebase-config.js`.
+2. Replace the placeholder values with the Firebase web-app configuration from the Firebase console.
+3. Load `firebase-config.js` before the Firebase module script in `index.html`.
+4. Configure Firestore security rules so the public client can only perform the operations the site genuinely needs.
 
 Do not commit service-account credentials, private keys, or admin SDK secrets. Firebase web configuration values are client-side identifiers, but database security must still be enforced through Firestore rules.
 
